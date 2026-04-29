@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LA CASA BURGUER | Cardápio Online</title>
+    <title>LA CASA BURGUER | Cardápio Online - Delivery</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@800;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Lobster&family=Pacifico&family=Bebas+Neue&display=swap" rel="stylesheet">
     <style>
+        /* ========== SEU CSS ORIGINAL (INTEIRAMENTE MANTIDO) ========== */
         :root {
             --primary: #223e3e;
             --secondary: #656c6c;
@@ -1846,12 +1847,11 @@
         </div>
     </div>
 
-    <!-- Modal de Checkout (APENAS RETIRADA NO LOCAL) -->
+    <!-- Modal de Checkout (DELIVERY com endereço obrigatório) -->
     <div class="checkout-modal" id="checkoutModal">
         <div class="checkout-form">
             <div class="checkout-header">
-                <h3>INFORMAÇÕES PRA ENTREGA!<Obj>
-                </Obj></h3>
+                <h3>Informações para Entrega</h3>
                 <button class="close-checkout" id="closeCheckout"><i class="fas fa-times"></i></button>
             </div>
             <div class="checkout-body">
@@ -1859,18 +1859,17 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label for="customerName">Nome Completo *</label>
-                            <input type="text" id="customerName" name="customerName"placeholder="Digite seu Nome" required required>
+                            <input type="text" id="customerName" name="customerName" placeholder="Digite seu nome" required>
                         </div>
                         <div class="form-group">
                             <label for="customerPhone">Telefone/WhatsApp *</label>
-                            <input type="tel" id="customerPhone" name="customerPhone" placeholder="Digite seu WhatsApp" requiredrequired>
-                            </div>
-                           </div>
-                           <div class="form-group">
-                            <label for="customerAddress">Endereço da Entrega *</label>
-                            <input type="text" id="customerAddress" name="customerAddress" placeholder="Digite seu endereço" required>
-                            </div>
-                           
+                            <input type="tel" id="customerPhone" name="customerPhone" placeholder="Digite seu Numero" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="customerEndereço">Endereço da Entrega *</label>
+                        <input type="text" id="customerAddress" name="customerAddress" placeholder="Digite seu endereço completo" required>
+                    </div>
                     
                     <!-- Cupom de Desconto -->
                     <div class="form-group coupon-container">
@@ -2011,7 +2010,7 @@
     <a href="https://wa.me/5587981193590" class="whatsapp-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
 
     <script>
-        // Dados do cardápio COMPLETO (mantido igual ao original)
+        // ========== CARDÁPIO COMPLETO (MANTIDO IGUAL AO ORIGINAL) ==========
         const menuItems = [
             { id: 1, name: "BAURU", description: "Mussarela, presunto e salada.", price: 8.00, category: "hamburgueres", image: "bauru.png" },
             { id: 2, name: "Hambúrguer", description: "Pão, carne, mussarela e presunto.", price: 9.00, category: "hamburgueres", image: "images.jpeg" },
@@ -2123,13 +2122,12 @@
         
         const locationPhoto = document.getElementById('locationPhoto');
 
-        // Elements removed: delivery radios, mesaGroup, addressGroup, etc.
-        // Only coupon and payment remain
+        // Cupom e totais
         const couponInput = document.getElementById('couponCode');
         const applyCouponBtn = document.getElementById('applyCouponBtn');
-        const couponMessage = document.getElementById('couponMessage');
+        const couponMessageDiv = document.getElementById('couponMessage');
         const subtotalSpan = document.getElementById('subtotalAmount');
-        const discountRow = document.getElementById('discountRow');
+        const discountRowDiv = document.getElementById('discountRow');
         const discountSpan = document.getElementById('discountAmount');
         const checkoutTotalSpan = document.getElementById('checkoutTotal');
 
@@ -2150,35 +2148,34 @@
             if (activeCoupon) {
                 let discountVal = subtotal - final;
                 discountSpan.innerText = discountVal.toFixed(2);
-                discountRow.style.display = 'block';
+                discountRowDiv.style.display = 'block';
             } else {
-                discountRow.style.display = 'none';
+                discountRowDiv.style.display = 'none';
             }
         }
 
         function applyCoupon() {
             const code = couponInput.value.trim().toUpperCase();
             if (!code) {
-                couponMessage.innerHTML = '<span style="color:red;">Digite um código</span>';
+                couponMessageDiv.innerHTML = '<span style="color:red;">Digite um código</span>';
                 return;
             }
             let discount = null;
             if (code === 'LA10') discount = { code, type: 'percent', discountValue: 10 };
-            else if (code === 'LA20') discount = { code, type: 'percent', discountValue: 20 };
             else if (code === 'LA5') discount = { code, type: 'fixed', discountValue: 5 };
             else {
-                couponMessage.innerHTML = '<span style="color:red;">Cupom inválido</span>';
+                couponMessageDiv.innerHTML = '<span style="color:red;">Cupom inválido</span>';
                 return;
             }
             activeCoupon = discount;
-            couponMessage.innerHTML = `<span style="color:green;">Cupom aplicado! ${discount.type === 'percent' ? `${discount.discountValue}% OFF` : `R$ ${discount.discountValue} OFF`}</span>`;
+            couponMessageDiv.innerHTML = `<span style="color:green;">Cupom aplicado! ${discount.type === 'percent' ? `${discount.discountValue}% OFF` : `R$ ${discount.discountValue} OFF`}</span>`;
             updateCheckoutTotals();
         }
 
         function resetCoupon() {
             activeCoupon = null;
             couponInput.value = '';
-            couponMessage.innerHTML = '';
+            couponMessageDiv.innerHTML = '';
             updateCheckoutTotals();
         }
 
@@ -2416,24 +2413,36 @@
             pendingOrderData = null;
         }
 
+        // FUNÇÃO PRINCIPAL DE ENVIO (DELIVERY COM ENDEREÇO)
         function sendOrderViaWhatsApp() {
             const customerName = document.getElementById('customerName').value.trim();
             const customerPhone = document.getElementById('customerPhone').value.trim();
+            const customerAddress = document.getElementById('customerAddress').value.trim();  // ← CAPTURA ENDEREÇO
             const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+            
             if (!customerName || !customerPhone) {
                 alert('Preencha nome e telefone.');
                 return;
             }
+            if (!customerAddress) {
+                alert('Preencha o endereço de entrega.');
+                document.getElementById('customerAddress').focus();
+                return;
+            }
+            
             const changeFor = document.getElementById('changeFor').value.trim();
             const customerNotes = document.getElementById('customerNotes').value.trim();
+            
             pendingOrderData = {
                 customerName,
                 customerPhone,
+                customerAddress,
                 paymentMethod,
                 changeFor,
                 customerNotes,
                 coupon: activeCoupon
             };
+            
             if (paymentMethod === 'PIX') {
                 checkoutModal.classList.remove('active');
                 pixModal.classList.add('active');
@@ -2463,8 +2472,9 @@
 
         function sendFinalOrder(data) {
             let phoneNumber = '5587981193590';
-            let message = `*PEDIDO LA CASA BURGER - RETIRADA NO LOCAL*\n\n`;
-            message += `Cliente: ${data.customerName}\nTelefone: ${data.customerPhone}\n\n`;
+            let message = `🍔 *PEDIDO LA CASA BURGUER - DELIVERY* 🚚\n\n`;
+            message += `Cliente: ${data.customerName}\nTelefone: ${data.customerPhone}\n`;
+            message += `📍 *Endereço de entrega:* ${data.customerAddress}\n\n`;
             message += `*Itens do Pedido:*\n`;
             cart.forEach((item, idx) => {
                 message += `${idx+1}. ${item.name} x${item.quantity} - R$ ${(item.price * item.quantity).toFixed(2)}\n`;
@@ -2474,17 +2484,18 @@
             if (data.coupon) {
                 finalTotal = applyCouponToAmount(subtotal);
                 const discountVal = subtotal - finalTotal;
-                message += `\n*Subtotal:* R$ ${subtotal.toFixed(2)}\n*Desconto (${data.coupon.code}):* -R$ ${discountVal.toFixed(2)}\n`;
+                message += `\nSubtotal: R$ ${subtotal.toFixed(2)}\nDesconto (${data.coupon.code}): -R$ ${discountVal.toFixed(2)}\n`;
             }
             message += `\n*Total:* R$ ${finalTotal.toFixed(2)}\n\n`;
-            message += `*Pagamento:* ${data.paymentMethod}\n`;
+            message += `💳 *Pagamento:* ${data.paymentMethod}\n`;
             if (data.changeFor && data.paymentMethod === 'Dinheiro') {
                 message += `Troco para: ${data.changeFor}\n`;
             }
             if (data.customerNotes) {
-                message += `\n*Observações:* ${data.customerNotes}\n`;
+                message += `\n📝 *Observações:* ${data.customerNotes}\n`;
             }
-            message += `\n*Retirar em:* Rua Carlos Cornélio, Centro`;
+            message += `\n✅ Recebemos seu pedido! Em breve ele estará a caminho 🚚`;
+            
             window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, '_blank');
             cart = [];
             updateCartDisplay();
