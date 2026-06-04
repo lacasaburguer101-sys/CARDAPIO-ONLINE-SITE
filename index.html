@@ -3,20 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LA CASA BURGUER | Cardápio Online - Delivery</title>
+    <title>LA CASA BURGUER | Brasil em Campo 🏆</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@800;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Lobster&family=Pacifico&family=Bebas+Neue&display=swap" rel="stylesheet">
     <style>
         /* ========== SEU CSS ORIGINAL (INTEIRAMENTE MANTIDO) ========== */
         :root {
-            --primary: #223e3e;
+            --primary: #021aee;
             --secondary: #656c6c;
             --dark: #2E2E2E;
             --light: #f9f9f9;
             --success: #4CAF50;
             --shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
             --border-radius: 12px;
+            /* Cores Brasil (adicionadas) */
+            --brazil-green: #009c3b;
+            --brazil-yellow: #ffdf00;
+            --brazil-blue: #002776;
         }
 
         * {
@@ -33,6 +37,160 @@
             overflow-x: hidden;
         }
 
+        /* ===== NOVOS ESTILOS COPA DO MUNDO ===== */
+        .confetti-wrap {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            overflow: hidden;
+        }
+        .star {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            opacity: 0;
+            animation: fall linear infinite;
+        }
+        @keyframes fall {
+            0% { transform: translateY(-20px) rotate(0); opacity: 1; }
+            100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+        }
+        .floating-ball {
+            position: fixed;
+            pointer-events: none;
+            z-index: 1;
+            font-size: 20px;
+            animation: float-ball linear infinite;
+            opacity: 0.2;
+        }
+        @keyframes float-ball {
+            0% { transform: translateY(100vh) rotate(0); }
+            100% { transform: translateY(-100px) rotate(720deg); }
+        }
+        .wc-banner {
+            background: linear-gradient(90deg, #009c3b, #ffdf00, #002776);
+            padding: 8px 0;
+            text-align: center;
+            font-weight: 700;
+            color: white;
+            font-size: 14px;
+            letter-spacing: 1px;
+            text-shadow: 1px 1px 0 rgba(0,0,0,0.3);
+        }
+        .score-banner {
+            background: #002776;
+            color: white;
+            padding: 12px 20px;
+            overflow: hidden;
+            position: relative;
+        }
+        .score-ticker {
+            display: flex;
+            gap: 60px;
+            white-space: nowrap;
+            animation: ticker 22s linear infinite;
+        }
+        @keyframes ticker {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); }
+        }
+        .score-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+        .score-vs { color: var(--brazil-yellow); font-weight: 700; }
+
+        /* Botão Pedir com bola */
+        .add-to-cart::before {
+            content: "⚽";
+            margin-right: 5px;
+            font-size: 0.9rem;
+            transition: transform 0.2s;
+            display: inline-block;
+        }
+        .add-to-cart:hover::before {
+            transform: rotate(360deg);
+        }
+
+        /* Página de agradecimento */
+        .thankyou-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #f8f5ee;
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: 0.3s;
+            padding: 20px;
+        }
+        .thankyou-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .thankyou-card {
+            max-width: 480px;
+            width: 100%;
+            background: white;
+            border-radius: 32px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 20px 35px -12px rgba(0,0,0,0.1);
+        }
+        .thankyou-logo {
+            width: 80px;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            border: 3px solid var(--brazil-yellow);
+        }
+        .thankyou-check {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--brazil-green), #008040);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            margin: 10px auto;
+        }
+        .thankyou-card h1 {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 28px;
+            color: #1a1a1a;
+        }
+        .thankyou-card h1 span { color: var(--brazil-green); }
+        .thankyou-info {
+            background: linear-gradient(135deg, rgba(0,156,59,0.05), rgba(255,223,0,0.08));
+            border-radius: 20px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        .thankyou-btn {
+            background: linear-gradient(135deg, var(--brazil-green), #004d26);
+            color: white;
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 60px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        /* ===== SEU CSS ORIGINAL CONTINUA ABAIXO (sem alterações) ===== */
         .container {
             width: 100%;
             max-width: 1200px;
@@ -40,7 +198,6 @@
             padding: 0 20px;
         }
 
-        /* Header e Navegação */
         header {
             background-color: #fff;
             box-shadow: var(--shadow);
@@ -106,7 +263,7 @@
 
         .logo-subtitle {
             font-size: 10px;
-            color: #666;
+            color: #063702;
             margin-top: 2px;
             letter-spacing: 0.5px;
             font-weight: 600;
@@ -180,78 +337,66 @@
             justify-content: center;
         }
 
+        /* Hero com cores vibrantes do Brasil (gradiente verde, amarelo, azul) */
         .hero {
-            background: rgb(56, 110, 111);
-            color: rgb(255, 255, 255);
+            background: linear-gradient(135deg, #009c3b 0%, #ffdf00 50%, #002776 100%);
+            color: white;
             padding: 60px 20px;
+            position: relative;
+            overflow: hidden;
         }
-
+        .hero::before {
+            content: "⚽⚽⚽";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            font-size: 80px;
+            opacity: 0.15;
+            white-space: nowrap;
+            animation: slideBalls 20s linear infinite;
+            pointer-events: none;
+        }
+        @keyframes slideBalls {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
         .hero-content {
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 40px;
+            position: relative;
+            z-index: 2;
         }
-
         .hero-text {
             text-align: center;
-            max-width: 600px;
+            max-width: 500px;
         }
-
-        .hero h2 {
-            font-size: 2rem;
-            margin-bottom: 15px;
-            font-weight: 700;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        .hero-text img {
+            max-width: 100%;
+            border-radius: 20px;
+            box-shadow: 0 0 30px rgba(255, 223, 0, 0.5);
+            animation: pulseGlow 2s infinite;
         }
-
-        .hero p {
-            font-size: 1rem;
-            max-width: 700px;
-            margin: 0 auto 30px;
-            opacity: 0.95;
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 0 10px rgba(255,223,0,0.5); }
+            50% { box-shadow: 0 0 30px rgba(255,223,0,0.9); }
+            100% { box-shadow: 0 0 10px rgba(255,223,0,0.5); }
         }
-
         .hero-image {
             width: 100%;
             max-width: 500px;
             border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
-            border: 5px solid rgb(156, 202, 199);
-            background-color: rgb(255, 255, 255);
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            border: 5px solid var(--brazil-yellow);
+            background: rgba(255,255,255,0.1);
         }
-
         .hero-image img {
             width: 100%;
             height: auto;
-            object-fit: contain;
             display: block;
             padding: 15px;
-        }
-
-        .cta-button {
-            display: inline-block;
-            background-color: var(--dark);
-            color: rgb(255, 255, 255);
-            padding: 12px 30px;
-            border-radius: 50px;
-            font-weight: 600;
-            font-size: 1rem;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            border: 2px solid var(--dark);
-            cursor: pointer;
-        }
-
-        .cta-button:hover {
-            background-color: transparent;
-            color: var(--dark);
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
         }
 
         .section-title {
@@ -1202,21 +1347,9 @@
                 text-align: left;
                 flex: 1;
             }
-            .hero h2 {
-                font-size: 2.8rem;
-            }
-            .hero p {
-                font-size: 1.2rem;
-                margin-left: 0;
-                margin-right: 0;
-            }
             .hero-image {
                 flex: 1;
                 max-width: 600px;
-            }
-            .cta-button {
-                padding: 15px 35px;
-                font-size: 1.1rem;
             }
             .section-title {
                 margin: 60px 0 40px;
@@ -1773,13 +1906,20 @@
     </style>
 </head>
 <body>
+    <!-- Container de confetes e bolas -->
+    <div class="confetti-wrap" id="confettiWrap"></div>
+    <!-- Banner Copa do Mundo -->
+    <div class="wc-banner">
+        <span>🏆 COPA DO MUNDO — PEÇA SEU LANCHE E TORÇA COM SABOR! 🇧🇷 VAMO BRASIL!</span>
+    </div>
+
     <header>
         <div class="container header-container">
             <a href="#" class="logo">
                 <img src="logo.jpg" class="logo-image" alt="Logo LA CASA BURGUER">
                 <div class="logo-text">
                     <h1>LA CASA <span>BURGUER</span></h1>
-                    <div class="logo-subtitle">MELHOR SABOR ESTA AQUI!</div>
+                    <div class="logo-subtitle">Torcida e sabor.!</div>
                 </div>
             </a>
             <nav class="nav-menu" id="navMenu">
@@ -1798,19 +1938,24 @@
         <div class="nav-overlay" id="navOverlay"></div>
     </header>
 
+    <!-- Hero sem texto e sem botão, apenas imagem animada do Brasil -->
     <section class="hero">
         <div class="container">
             <div class="hero-content">
                 <div class="hero-text">
-                    <h2>Os melhores lanches da região</h2>
-                    <a href="#menu" class="cta-button">Ver Cardápio</a>
+                    <img src="https://media.tenor.com/search?q=brazil+flag" alt="Brasil">
                 </div>
                 <div class="hero-image">
-                    <img src="logo.jpg" alt="Logo LA CASA BURGUER">
+                    <img src="vaibra.png" alt="Logo LA CASA BURGUER">
                 </div>
             </div>
         </div>
     </section>
+
+    <!-- Placar rolante -->
+    <div class="score-banner">
+        <div class="score-ticker" id="scoreTicker"></div>
+    </div>
 
     <section id="menu">
         <div class="container">
@@ -1952,6 +2097,24 @@
                     <button class="back-to-checkout-btn" id="backToCheckoutBtn"><i class="fas fa-arrow-left"></i> Voltar</button>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Página de agradecimento -->
+    <div class="thankyou-overlay" id="thankyouOverlay">
+        <div class="thankyou-card">
+            <div class="thankyou-check">✓</div>
+            <h1>Pedido Feito<br><span>com Sucesso!</span></h1>
+            <p style="color:#666; margin-bottom:10px;">Recebemos seu pedido e ele já está sendo preparado com todo carinho.</p>
+            <div style="margin:10px 0; animation: spinBall 2s infinite;">
+             <img src="delivery.png" alt="Entrega" style="width:150px; height:auto;">
+           </div> 
+            <div class="thankyou-info">
+                <h3>🍔 Obrigado!</h3>
+                <p>Em breve seu pedido estará a caminho.<br>Aguarde só mais um pouquinho. ⚽</p>
+            </div>
+            <button class="thankyou-btn" id="closeThankyouBtn">← Voltar ao Site</button>
+            <div style="margin-top:14px; font-size:12px; color:#aaa;">❤️ Obrigado por escolher a La Casa Burguer</div>
         </div>
     </div>
 
@@ -2120,6 +2283,10 @@
         const confirmPixBtn = document.getElementById('confirmPixBtn');
         const backToCheckoutBtn = document.getElementById('backToCheckoutBtn');
         
+        // Thank you element
+        const thankyouOverlay = document.getElementById('thankyouOverlay');
+        const closeThankyouBtn = document.getElementById('closeThankyouBtn');
+        
         const locationPhoto = document.getElementById('locationPhoto');
 
         // Cupom e totais
@@ -2179,6 +2346,42 @@
             updateCheckoutTotals();
         }
 
+        // Novas funções para confetes e placar
+        function setupConfetti() {
+            const wrap = document.getElementById('confettiWrap');
+            const colors = ['#009c3b','#ffdf00','#002776','#ffffff','#00aa00'];
+            for (let i = 0; i < 25; i++) {
+                const s = document.createElement('div');
+                s.className = 'star';
+                s.style.cssText = `left:${Math.random()*100}%;top:${-20+Math.random()*-100}px;background:${colors[i%colors.length]};border-radius:${Math.random()>0.5?'50%':'2px'};width:${6+Math.random()*8}px;height:${6+Math.random()*8}px;animation-duration:${5+Math.random()*8}s;animation-delay:${Math.random()*6}s`;
+                wrap.appendChild(s);
+            }
+            for (let i=0;i<10;i++) {
+                const b = document.createElement('div');
+                b.className = 'floating-ball';
+                b.textContent = '⚽';
+                b.style.cssText = `left:${Math.random()*90}%;animation-duration:${8+Math.random()*10}s;animation-delay:${Math.random()*8}s;font-size:${14+Math.random()*12}px`;
+                document.body.appendChild(b);
+            }
+        }
+
+        function setupScoreTicker() {
+            const scores = ["O sabor da torcida. 🇧🇷"];
+            const ticker = document.getElementById('scoreTicker');
+            const all = [...scores, ...scores];
+            ticker.innerHTML = all.map(s => `<span class="score-item">${s}<span class="score-vs">|</span></span>`).join('');
+        }
+
+        function showThankYou() {
+            thankyouOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function hideThankYou() {
+            thankyouOverlay.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             cartSidebar.classList.remove('active');
             cartOverlay.classList.remove('active');
@@ -2187,6 +2390,8 @@
             if (window.innerWidth <= 768) cartSidebar.style.bottom = '-100%';
             renderMenuItems();
             updateCartDisplay();
+            setupConfetti();
+            setupScoreTicker();
             
             cartToggle.addEventListener('click', toggleCart);
             closeCart.addEventListener('click', toggleCart);
@@ -2203,6 +2408,7 @@
             });
             applyCouponBtn.addEventListener('click', applyCoupon);
             locationPhoto.addEventListener('click', openLocationMap);
+            closeThankyouBtn.addEventListener('click', hideThankYou);
             
             categoryButtons.forEach(button => {
                 button.addEventListener('click', () => {
@@ -2413,11 +2619,10 @@
             pendingOrderData = null;
         }
 
-        // FUNÇÃO PRINCIPAL DE ENVIO (DELIVERY COM ENDEREÇO)
         function sendOrderViaWhatsApp() {
             const customerName = document.getElementById('customerName').value.trim();
             const customerPhone = document.getElementById('customerPhone').value.trim();
-            const customerAddress = document.getElementById('customerAddress').value.trim();  // ← CAPTURA ENDEREÇO
+            const customerAddress = document.getElementById('customerAddress').value.trim();
             const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
             
             if (!customerName || !customerPhone) {
@@ -2504,6 +2709,9 @@
             pixModal.classList.remove('active');
             pendingOrderData = null;
             activeCoupon = null;
+            
+            // Mostrar página de agradecimento
+            showThankYou();
         }
 
         renderMenuItems();
