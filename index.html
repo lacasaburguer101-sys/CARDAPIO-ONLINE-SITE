@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>LA CASA BURGUER | Brasil em Campo 🏆</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@800;900&display=swap" rel="stylesheet">
@@ -16,8 +16,7 @@
             --light: #f9f9f9;
             --success: #4CAF50;
             --shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            --border-radius: 12px;
-            /* Cores Brasil (adicionadas) */
+            --border-radius: 12px; 
             --brazil-green: #009c3b;
             --brazil-yellow: #ffdf00;
             --brazil-blue: #002776;
@@ -117,6 +116,67 @@
         }
         .add-to-cart:hover::before {
             transform: rotate(360deg);
+        }
+
+        /* ===== EFEITO "GOL" e "GOLAÇO" (ADICIONADO) ===== */
+        .goal-effect {
+            position: fixed;
+            font-size: 2.8rem;
+            font-weight: 900;
+            font-family: 'Bebas Neue', 'Impact', sans-serif;
+            color: #ffdf00;
+            text-shadow: 4px 4px 0 #009c3b, 6px 6px 0 #002776;
+            pointer-events: none;
+            z-index: 10000;
+            white-space: nowrap;
+            animation: goalPop 1s ease-out forwards;
+            transform-origin: center;
+        }
+        @keyframes goalPop {
+            0% { opacity: 1; transform: scale(0.2) translateY(0); }
+            40% { opacity: 1; transform: scale(1.3) translateY(-20px); }
+            80% { opacity: 1; transform: scale(1) translateY(-40px); }
+            100% { opacity: 0; transform: scale(0.8) translateY(-70px); }
+        }
+
+        /* ===== FUNDO BANDEIRA DO BRASIL SOMBREADA NO CARRINHO (ADICIONADO) ===== */
+        .cart-sidebar {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            height: 100%;
+            background-color: white;
+            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+            z-index: 1100;
+            transition: right 0.4s ease;
+            display: flex;
+            flex-direction: column;
+            background-image: url('https://upload.wikimedia.org/wikipedia/commons/0/05/Flag_of_Brazil.svg');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: 70% auto;
+            background-blend-mode: overlay;
+        }
+        .cart-sidebar::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(1px);
+            pointer-events: none;
+            z-index: 0;
+        }
+        .cart-sidebar > * {
+            position: relative;
+            z-index: 2;
+        }
+
+        .cart-sidebar.active {
+            right: 0;
         }
 
         /* Página de agradecimento */
@@ -549,24 +609,6 @@
         .add-to-cart:hover {
             background-color: #2c5a59;
             transform: translateY(-2px);
-        }
-
-        .cart-sidebar {
-            position: fixed;
-            top: 0;
-            right: -100%;
-            width: 100%;
-            height: 100%;
-            background-color: white;
-            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
-            z-index: 1100;
-            transition: right 0.4s ease;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .cart-sidebar.active {
-            right: 0;
         }
 
         .cart-header {
@@ -2172,6 +2214,11 @@
 
     <a href="https://wa.me/5587981193590" class="whatsapp-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
 
+    <!-- Áudio de torcida (link funcional - substituído por arquivo sem erro 403) -->
+    <audio id="goalAudio" preload="auto" style="display:none">
+        <source src="goalAudio.mp3" type="audio/mpeg">
+    </audio>
+
     <script>
         // ========== CARDÁPIO COMPLETO (MANTIDO IGUAL AO ORIGINAL) ==========
         const menuItems = [
@@ -2328,8 +2375,7 @@
                 return;
             }
             let discount = null;
-            if (code === 'LA10') discount = { code, type: 'percent', discountValue: 10 };
-            else if (code === 'LA5') discount = { code, type: 'fixed', discountValue: 5 };
+            if (code === 'VAIBRASILL') discount = { code, type: 'percent', discountValue: 10 };
             else {
                 couponMessageDiv.innerHTML = '<span style="color:red;">Cupom inválido</span>';
                 return;
@@ -2346,7 +2392,31 @@
             updateCheckoutTotals();
         }
 
-        // Novas funções para confetes e placar
+        // ===== FUNÇÃO PARA EFEITO "GOL"/"GOLAÇO" E SOM DE TORCIDA (ADICIONADA) =====
+        function playGoalEffect(buttonElement, texto = "GOL") {
+            const rect = buttonElement.getBoundingClientRect();
+            const goalDiv = document.createElement('div');
+            goalDiv.className = 'goal-effect';
+            if (texto === "GOL") {
+                goalDiv.textContent = '⚽ GOL! 🇧🇷';
+            } else {
+                goalDiv.textContent = '⚽ GOLAÇO! 🇧🇷⚽';
+            }
+            goalDiv.style.left = `${rect.left + rect.width / 2 - 70}px`;
+            goalDiv.style.top = `${rect.top - 50}px`;
+            document.body.appendChild(goalDiv);
+            setTimeout(() => {
+                if (goalDiv.parentNode) goalDiv.parentNode.removeChild(goalDiv);
+            }, 1000);
+            
+            const audio = document.getElementById('goalAudio');
+            if (audio) {
+                audio.currentTime = 0;
+                audio.play().catch(e => console.log("Áudio não pôde ser reproduzido:", e));
+            }
+        }
+
+        // Funções de confetes e placar
         function setupConfetti() {
             const wrap = document.getElementById('confettiWrap');
             const colors = ['#009c3b','#ffdf00','#002776','#ffffff','#00aa00'];
@@ -2382,83 +2452,22 @@
             document.body.style.overflow = 'auto';
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            cartSidebar.classList.remove('active');
-            cartOverlay.classList.remove('active');
-            checkoutModal.classList.remove('active');
-            pixModal.classList.remove('active');
-            if (window.innerWidth <= 768) cartSidebar.style.bottom = '-100%';
-            renderMenuItems();
+        // ===== FUNÇÃO addToCart MODIFICADA COM EFEITO GOL =====
+        function addToCart(id, buttonElement) {
+            playGoalEffect(buttonElement, "GOL");
+            const item = menuItems.find(i => i.id === id);
+            const existing = cart.find(i => i.id === id);
+            if (existing) existing.quantity++;
+            else cart.push({ ...item, quantity: 1 });
             updateCartDisplay();
-            setupConfetti();
-            setupScoreTicker();
-            
-            cartToggle.addEventListener('click', toggleCart);
-            closeCart.addEventListener('click', toggleCart);
-            cartOverlay.addEventListener('click', toggleCart);
-            whatsappCheckout.addEventListener('click', openCheckoutModal);
-            closeCheckout.addEventListener('click', closeCheckoutModal);
-            sendWhatsApp.addEventListener('click', sendOrderViaWhatsApp);
-            copyPixBtnDesktop.addEventListener('click', copyPixKey);
-            copyPixBtnMobile.addEventListener('click', copyPixKey);
-            confirmPixBtn.addEventListener('click', sendPixOrderViaWhatsApp);
-            backToCheckoutBtn.addEventListener('click', () => {
-                pixModal.classList.remove('active');
-                checkoutModal.classList.add('active');
-            });
-            applyCouponBtn.addEventListener('click', applyCoupon);
-            locationPhoto.addEventListener('click', openLocationMap);
-            closeThankyouBtn.addEventListener('click', hideThankYou);
-            
-            categoryButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    categoryButtons.forEach(btn => btn.classList.remove('active'));
-                    button.classList.add('active');
-                    currentCategory = button.dataset.category;
-                    renderMenuItems();
-                });
-            });
-            
-            menuToggle.addEventListener('click', toggleMobileMenu);
-            navOverlay.addEventListener('click', toggleMobileMenu);
-            navLinks.forEach(link => {
-                link.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const targetId = link.getAttribute('href');
-                    if (window.innerWidth <= 768) toggleMobileMenu();
-                    navLinks.forEach(l => l.classList.remove('active'));
-                    link.classList.add('active');
-                    if (targetId && targetId !== '#') {
-                        const targetElement = document.querySelector(targetId);
-                        if (targetElement) {
-                            window.scrollTo({ top: targetElement.offsetTop - 80, behavior: 'smooth' });
-                        }
-                    }
-                });
-            });
-            window.addEventListener('resize', () => {
-                if (window.innerWidth > 768) {
-                    navMenu.classList.remove('active');
-                    navOverlay.classList.remove('active');
-                    document.body.style.overflow = 'auto';
-                }
-            });
-            checkoutModal.addEventListener('click', (e) => { if (e.target === checkoutModal) closeCheckoutModal(); });
-            pixModal.addEventListener('click', (e) => { if (e.target === pixModal) { pixModal.classList.remove('active'); setTimeout(() => checkoutModal.classList.add('active'), 300); } });
-        });
-
-        function openLocationMap() {
-            window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent("Rua Carlos Cornélio, Centro")}`, '_blank');
-        }
-
-        function toggleMobileMenu() {
-            const isActive = navMenu.classList.contains('active');
-            navMenu.classList.toggle('active');
-            navOverlay.classList.toggle('active');
-            document.body.style.overflow = isActive ? 'auto' : 'hidden';
-            const icon = menuToggle.querySelector('i');
-            icon.classList.toggle('fa-bars');
-            icon.classList.toggle('fa-times');
+            saveCart();
+            const original = buttonElement.innerHTML;
+            buttonElement.innerHTML = '✓ Adicionado!';
+            buttonElement.style.backgroundColor = 'var(--success)';
+            setTimeout(() => {
+                buttonElement.innerHTML = original;
+                buttonElement.style.backgroundColor = 'var(--primary)';
+            }, 1500);
         }
 
         function renderMenuItems() {
@@ -2472,7 +2481,7 @@
                 const div = document.createElement('div');
                 div.className = 'menu-item';
                 div.innerHTML = `
-                    <div class="item-image"><img src="${item.image}" alt="${item.name}" loading="lazy"></div>
+                    <div class="item-image"><img src="${item.image}" alt="${item.name}" loading="lazy" onerror="this.src='https://via.placeholder.com/150?text=Imagem'"></div>
                     <div class="item-info"><h3>${item.name}</h3><p>${item.description}</p>
                     <div class="item-footer"><span class="price">R$ ${item.price.toFixed(2)}</span>
                     <button class="add-to-cart" data-id="${item.id}">Pedir</button></div></div>
@@ -2480,25 +2489,11 @@
                 menuGrid.appendChild(div);
             });
             document.querySelectorAll('.add-to-cart').forEach(btn => {
-                btn.addEventListener('click', (e) => addToCart(parseInt(btn.dataset.id)));
+                btn.addEventListener('click', (e) => {
+                    const id = parseInt(btn.dataset.id);
+                    addToCart(id, btn);
+                });
             });
-        }
-
-        function addToCart(id) {
-            const item = menuItems.find(i => i.id === id);
-            const existing = cart.find(i => i.id === id);
-            if (existing) existing.quantity++;
-            else cart.push({ ...item, quantity: 1 });
-            updateCartDisplay();
-            saveCart();
-            const btn = document.querySelector(`.add-to-cart[data-id="${id}"]`);
-            const original = btn.innerHTML;
-            btn.innerHTML = '✓ Adicionado!';
-            btn.style.backgroundColor = 'var(--success)';
-            setTimeout(() => {
-                btn.innerHTML = original;
-                btn.style.backgroundColor = 'var(--primary)';
-            }, 1500);
         }
 
         function updateCartDisplay() {
@@ -2515,7 +2510,7 @@
                 const div = document.createElement('div');
                 div.className = 'cart-item';
                 div.innerHTML = `
-                    <div class="cart-item-image"><img src="${item.image}"></div>
+                    <div class="cart-item-image"><img src="${item.image}" onerror="this.src='https://via.placeholder.com/50'"></div>
                     <div class="cart-item-info"><h4>${item.name}</h4><p>R$ ${item.price.toFixed(2)}</p></div>
                     <div class="cart-item-controls">
                         <button class="quantity-btn decrease" data-id="${item.id}"><i class="fas fa-minus"></i></button>
@@ -2530,14 +2525,14 @@
                 btn.addEventListener('click', (e) => {
                     const id = parseInt(btn.dataset.id);
                     const i = cart.find(i => i.id === id);
-                    updateQuantity(id, i.quantity - 1);
+                    if (i) updateQuantity(id, i.quantity - 1);
                 });
             });
             document.querySelectorAll('.increase').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     const id = parseInt(btn.dataset.id);
                     const i = cart.find(i => i.id === id);
-                    updateQuantity(id, i.quantity + 1);
+                    if (i) updateQuantity(id, i.quantity + 1);
                 });
             });
             document.querySelectorAll('.remove-item').forEach(btn => {
@@ -2603,6 +2598,8 @@
                 alert('Seu carrinho está vazio!');
                 return;
             }
+            // Efeito GOLAÇO no botão "Finalizar Pedido"
+            playGoalEffect(whatsappCheckout, "GOLAÇO");
             if (cartSidebar.classList.contains('active')) toggleCart();
             customerForm.reset();
             document.getElementById('paymentCash').checked = true;
@@ -2710,12 +2707,88 @@
             pendingOrderData = null;
             activeCoupon = null;
             
-            // Mostrar página de agradecimento
             showThankYou();
         }
 
-        renderMenuItems();
-        updateCartDisplay();
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', () => {
+            cartSidebar.classList.remove('active');
+            cartOverlay.classList.remove('active');
+            checkoutModal.classList.remove('active');
+            pixModal.classList.remove('active');
+            if (window.innerWidth <= 768) cartSidebar.style.bottom = '-100%';
+            renderMenuItems();
+            updateCartDisplay();
+            setupConfetti();
+            setupScoreTicker();
+            
+            cartToggle.addEventListener('click', toggleCart);
+            closeCart.addEventListener('click', toggleCart);
+            cartOverlay.addEventListener('click', toggleCart);
+            whatsappCheckout.addEventListener('click', openCheckoutModal);
+            closeCheckout.addEventListener('click', closeCheckoutModal);
+            sendWhatsApp.addEventListener('click', sendOrderViaWhatsApp);
+            copyPixBtnDesktop.addEventListener('click', copyPixKey);
+            copyPixBtnMobile.addEventListener('click', copyPixKey);
+            confirmPixBtn.addEventListener('click', sendPixOrderViaWhatsApp);
+            backToCheckoutBtn.addEventListener('click', () => {
+                pixModal.classList.remove('active');
+                checkoutModal.classList.add('active');
+            });
+            applyCouponBtn.addEventListener('click', applyCoupon);
+            locationPhoto.addEventListener('click', openLocationMap);
+            closeThankyouBtn.addEventListener('click', hideThankYou);
+            
+            categoryButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    categoryButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    currentCategory = button.dataset.category;
+                    renderMenuItems();
+                });
+            });
+            
+            menuToggle.addEventListener('click', toggleMobileMenu);
+            navOverlay.addEventListener('click', toggleMobileMenu);
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const targetId = link.getAttribute('href');
+                    if (window.innerWidth <= 768) toggleMobileMenu();
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    link.classList.add('active');
+                    if (targetId && targetId !== '#') {
+                        const targetElement = document.querySelector(targetId);
+                        if (targetElement) {
+                            window.scrollTo({ top: targetElement.offsetTop - 80, behavior: 'smooth' });
+                        }
+                    }
+                });
+            });
+            window.addEventListener('resize', () => {
+                if (window.innerWidth > 768) {
+                    navMenu.classList.remove('active');
+                    navOverlay.classList.remove('active');
+                    document.body.style.overflow = 'auto';
+                }
+            });
+            checkoutModal.addEventListener('click', (e) => { if (e.target === checkoutModal) closeCheckoutModal(); });
+            pixModal.addEventListener('click', (e) => { if (e.target === pixModal) { pixModal.classList.remove('active'); setTimeout(() => checkoutModal.classList.add('active'), 300); } });
+        });
+
+        function openLocationMap() {
+            window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent("Rua Carlos Cornélio, Centro")}`, '_blank');
+        }
+
+        function toggleMobileMenu() {
+            const isActive = navMenu.classList.contains('active');
+            navMenu.classList.toggle('active');
+            navOverlay.classList.toggle('active');
+            document.body.style.overflow = isActive ? 'auto' : 'hidden';
+            const icon = menuToggle.querySelector('i');
+            icon.classList.toggle('fa-bars');
+            icon.classList.toggle('fa-times');
+        }
     </script>
 </body>
 </html>
