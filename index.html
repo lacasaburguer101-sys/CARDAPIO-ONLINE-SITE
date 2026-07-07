@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>LA CASA BURGUER | Brasil em Campo 🏆</title>
+    <title>LA CASA BURGUER</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@800;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Lobster&family=Pacifico&family=Bebas+Neue&display=swap" rel="stylesheet">
     <style>
-        /* ========== SEU CSS ORIGINAL (INTEIRAMENTE MANTIDO) ========== */
+        /* ========== CSS BASE (SEM ANIMAÇÕES DA COPA) ========== */
         :root {
-            --primary: #021aee;
+            --primary: #214440;
             --secondary: #656c6c;
             --dark: #2E2E2E;
             --light: #f9f9f9;
@@ -18,8 +18,8 @@
             --shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
             --border-radius: 12px; 
             --brazil-green: #009c3b;
-            --brazil-yellow: #ffdf00;
-            --brazil-blue: #002776;
+            --brazil-yellow: #226157;
+            --brazil-blue: #055c81;
         }
 
         * {
@@ -36,221 +36,6 @@
             overflow-x: hidden;
         }
 
-        /* ===== NOVOS ESTILOS COPA DO MUNDO ===== */
-        .confetti-wrap {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 9999;
-            overflow: hidden;
-        }
-        .star {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            opacity: 0;
-            animation: fall linear infinite;
-        }
-        @keyframes fall {
-            0% { transform: translateY(-20px) rotate(0); opacity: 1; }
-            100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
-        }
-        .floating-ball {
-            position: fixed;
-            pointer-events: none;
-            z-index: 1;
-            font-size: 20px;
-            animation: float-ball linear infinite;
-            opacity: 0.2;
-        }
-        @keyframes float-ball {
-            0% { transform: translateY(100vh) rotate(0); }
-            100% { transform: translateY(-100px) rotate(720deg); }
-        }
-        .wc-banner {
-            background: linear-gradient(90deg, #009c3b, #ffdf00, #002776);
-            padding: 8px 0;
-            text-align: center;
-            font-weight: 700;
-            color: white;
-            font-size: 14px;
-            letter-spacing: 1px;
-            text-shadow: 1px 1px 0 rgba(0,0,0,0.3);
-        }
-        .score-banner {
-            background: #002776;
-            color: white;
-            padding: 12px 20px;
-            overflow: hidden;
-            position: relative;
-        }
-        .score-ticker {
-            display: flex;
-            gap: 60px;
-            white-space: nowrap;
-            animation: ticker 22s linear infinite;
-        }
-        @keyframes ticker {
-            from { transform: translateX(0); }
-            to { transform: translateX(-50%); }
-        }
-        .score-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 13px;
-            font-weight: 500;
-        }
-        .score-vs { color: var(--brazil-yellow); font-weight: 700; }
-
-        /* Botão Pedir com bola */
-        .add-to-cart::before {
-            content: "⚽";
-            margin-right: 5px;
-            font-size: 0.9rem;
-            transition: transform 0.2s;
-            display: inline-block;
-        }
-        .add-to-cart:hover::before {
-            transform: rotate(360deg);
-        }
-
-        /* ===== EFEITO "GOL" e "GOLAÇO" (ADICIONADO) ===== */
-        .goal-effect {
-            position: fixed;
-            font-size: 2.8rem;
-            font-weight: 900;
-            font-family: 'Bebas Neue', 'Impact', sans-serif;
-            color: #ffdf00;
-            text-shadow: 4px 4px 0 #009c3b, 6px 6px 0 #002776;
-            pointer-events: none;
-            z-index: 10000;
-            white-space: nowrap;
-            animation: goalPop 1s ease-out forwards;
-            transform-origin: center;
-        }
-        @keyframes goalPop {
-            0% { opacity: 1; transform: scale(0.2) translateY(0); }
-            40% { opacity: 1; transform: scale(1.3) translateY(-20px); }
-            80% { opacity: 1; transform: scale(1) translateY(-40px); }
-            100% { opacity: 0; transform: scale(0.8) translateY(-70px); }
-        }
-
-        /* ===== FUNDO BANDEIRA DO BRASIL SOMBREADA NO CARRINHO (ADICIONADO) ===== */
-        .cart-sidebar {
-            position: fixed;
-            top: 0;
-            right: -100%;
-            width: 100%;
-            height: 100%;
-            background-color: white;
-            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
-            z-index: 1100;
-            transition: right 0.4s ease;
-            display: flex;
-            flex-direction: column;
-            background-image: url('https://upload.wikimedia.org/wikipedia/commons/0/05/Flag_of_Brazil.svg');
-            background-repeat: no-repeat;
-            background-position: center;
-            background-size: 70% auto;
-            background-blend-mode: overlay;
-        }
-        .cart-sidebar::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(1px);
-            pointer-events: none;
-            z-index: 0;
-        }
-        .cart-sidebar > * {
-            position: relative;
-            z-index: 2;
-        }
-
-        .cart-sidebar.active {
-            right: 0;
-        }
-
-        /* Página de agradecimento */
-        .thankyou-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #f8f5ee;
-            z-index: 2000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            visibility: hidden;
-            transition: 0.3s;
-            padding: 20px;
-        }
-        .thankyou-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-        .thankyou-card {
-            max-width: 480px;
-            width: 100%;
-            background: white;
-            border-radius: 32px;
-            padding: 20px;
-            text-align: center;
-            box-shadow: 0 20px 35px -12px rgba(0,0,0,0.1);
-        }
-        .thankyou-logo {
-            width: 80px;
-            border-radius: 12px;
-            margin-bottom: 8px;
-            border: 3px solid var(--brazil-yellow);
-        }
-        .thankyou-check {
-            width: 48px;
-            height: 48px;
-            background: linear-gradient(135deg, var(--brazil-green), #008040);
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 26px;
-            margin: 10px auto;
-        }
-        .thankyou-card h1 {
-            font-family: 'Bebas Neue', cursive;
-            font-size: 28px;
-            color: #1a1a1a;
-        }
-        .thankyou-card h1 span { color: var(--brazil-green); }
-        .thankyou-info {
-            background: linear-gradient(135deg, rgba(0,156,59,0.05), rgba(255,223,0,0.08));
-            border-radius: 20px;
-            padding: 15px;
-            margin: 15px 0;
-        }
-        .thankyou-btn {
-            background: linear-gradient(135deg, var(--brazil-green), #004d26);
-            color: white;
-            width: 100%;
-            padding: 12px;
-            border: none;
-            border-radius: 60px;
-            font-weight: 700;
-            cursor: pointer;
-        }
-
-        /* ===== SEU CSS ORIGINAL CONTINUA ABAIXO (sem alterações) ===== */
         .container {
             width: 100%;
             max-width: 1200px;
@@ -397,28 +182,13 @@
             justify-content: center;
         }
 
-        /* Hero com cores vibrantes do Brasil (gradiente verde, amarelo, azul) */
+        /* Hero sem animações */
         .hero {
-            background: linear-gradient(135deg, #009c3b 0%, #ffdf00 50%, #002776 100%);
+            background: linear-gradient(135deg, #0d6863 0%, #0b554d 50%, #12625e 100%);
             color: white;
             padding: 60px 20px;
             position: relative;
             overflow: hidden;
-        }
-        .hero::before {
-            content: "⚽⚽⚽";
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            font-size: 80px;
-            opacity: 0.15;
-            white-space: nowrap;
-            animation: slideBalls 20s linear infinite;
-            pointer-events: none;
-        }
-        @keyframes slideBalls {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
         }
         .hero-content {
             display: flex;
@@ -435,13 +205,7 @@
         .hero-text img {
             max-width: 100%;
             border-radius: 20px;
-            box-shadow: 0 0 30px rgba(255, 223, 0, 0.5);
-            animation: pulseGlow 2s infinite;
-        }
-        @keyframes pulseGlow {
-            0% { box-shadow: 0 0 10px rgba(255,223,0,0.5); }
-            50% { box-shadow: 0 0 30px rgba(255,223,0,0.9); }
-            100% { box-shadow: 0 0 10px rgba(255,223,0,0.5); }
+            box-shadow: 0 0 30px rgba(253, 253, 253, 0.5);
         }
         .hero-image {
             width: 100%;
@@ -611,6 +375,25 @@
             transform: translateY(-2px);
         }
 
+        /* Carrinho lateral */
+        .cart-sidebar {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            height: 100%;
+            background-color: white;
+            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+            z-index: 1100;
+            transition: right 0.4s ease;
+            display: flex;
+            flex-direction: column;
+            background-color: #fff;
+        }
+        .cart-sidebar.active {
+            right: 0;
+        }
+
         .cart-header {
             display: flex;
             justify-content: space-between;
@@ -772,6 +555,7 @@
             visibility: visible;
         }
 
+        /* Checkout */
         .checkout-modal {
             position: fixed;
             top: 0;
@@ -986,6 +770,7 @@
             background-color: #1da851;
         }
 
+        /* PIX Modal */
         .pix-modal {
             position: fixed;
             top: 0;
@@ -1162,7 +947,7 @@
 
         .payment-warning {
             background-color: #fff8e1;
-            border-left: 4px solid #ffc107;
+            border-left: 4px solid #ffbf00;
             padding: 12px;
             text-align: left;
             margin: 20px 0;
@@ -1170,6 +955,78 @@
             font-size: 14px;
         }
 
+        /* Thank you */
+        .thankyou-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #f8f5ee;
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: 0.3s;
+            padding: 20px;
+        }
+        .thankyou-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .thankyou-card {
+            max-width: 480px;
+            width: 100%;
+            background: white;
+            border-radius: 32px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 20px 35px -12px rgba(0,0,0,0.1);
+        }
+        .thankyou-logo {
+            width: 80px;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            border: 3px solid var(--brazil-yellow);
+        }
+        .thankyou-check {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--brazil-green), #008040);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            margin: 10px auto;
+        }
+        .thankyou-card h1 {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 28px;
+            color: #1a1a1a;
+        }
+        .thankyou-card h1 span { color: var(--brazil-green); }
+        .thankyou-info {
+            background: linear-gradient(135deg, rgba(0,156,59,0.05), rgba(255,223,0,0.08));
+            border-radius: 20px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        .thankyou-btn {
+            background: linear-gradient(135deg, var(--brazil-green), #004d26);
+            color: white;
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 60px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        /* Footer e Localização */
         footer {
             background-color: var(--dark);
             color: white;
@@ -1376,6 +1233,7 @@
             opacity: 1;
         }
 
+        /* Media Queries (mantidas do original) */
         @media (min-width: 769px) {
             .hero {
                 padding: 80px 20px;
@@ -1948,20 +1806,13 @@
     </style>
 </head>
 <body>
-    <!-- Container de confetes e bolas -->
-    <div class="confetti-wrap" id="confettiWrap"></div>
-    <!-- Banner Copa do Mundo -->
-    <div class="wc-banner">
-        <span>🏆 COPA DO MUNDO — PEÇA SEU LANCHE E TORÇA COM SABOR! 🇧🇷 VAMO BRASIL!</span>
-    </div>
-
     <header>
         <div class="container header-container">
             <a href="#" class="logo">
                 <img src="logo.jpg" class="logo-image" alt="Logo LA CASA BURGUER">
                 <div class="logo-text">
                     <h1>LA CASA <span>BURGUER</span></h1>
-                    <div class="logo-subtitle">Torcida e sabor.!</div>
+                    <div class="logo-subtitle">Sabor e qualidade</div>
                 </div>
             </a>
             <nav class="nav-menu" id="navMenu">
@@ -1980,7 +1831,7 @@
         <div class="nav-overlay" id="navOverlay"></div>
     </header>
 
-    <!-- Hero sem texto e sem botão, apenas imagem animada do Brasil -->
+    <!-- Hero sem animações -->
     <section class="hero">
         <div class="container">
             <div class="hero-content">
@@ -1993,11 +1844,6 @@
             </div>
         </div>
     </section>
-
-    <!-- Placar rolante -->
-    <div class="score-banner">
-        <div class="score-ticker" id="scoreTicker"></div>
-    </div>
 
     <section id="menu">
         <div class="container">
@@ -2034,7 +1880,7 @@
         </div>
     </div>
 
-    <!-- Modal de Checkout (DELIVERY com endereço obrigatório) -->
+    <!-- Modal de Checkout -->
     <div class="checkout-modal" id="checkoutModal">
         <div class="checkout-form">
             <div class="checkout-header">
@@ -2068,7 +1914,6 @@
                         <div id="couponMessage" style="font-size:12px; margin-top:5px;"></div>
                     </div>
 
-                    <!-- Resumo com desconto -->
                     <div class="order-summary-discount">
                         <div>Subtotal: R$ <span id="subtotalAmount">0,00</span></div>
                         <div id="discountRow" style="display:none;">Desconto: -R$ <span id="discountAmount">0,00</span></div>
@@ -2110,6 +1955,7 @@
         </div>
     </div>
 
+    <!-- PIX Modal -->
     <div class="pix-modal" id="pixModal">
         <div class="pix-content">
             <div class="pix-header">
@@ -2142,18 +1988,18 @@
         </div>
     </div>
 
-    <!-- Página de agradecimento -->
+    <!-- Thank You -->
     <div class="thankyou-overlay" id="thankyouOverlay">
         <div class="thankyou-card">
             <div class="thankyou-check">✓</div>
             <h1>Pedido Feito<br><span>com Sucesso!</span></h1>
             <p style="color:#666; margin-bottom:10px;">Recebemos seu pedido e ele já está sendo preparado com todo carinho.</p>
-            <div style="margin:10px 0; animation: spinBall 2s infinite;">
-             <img src="delivery.png" alt="Entrega" style="width:150px; height:auto;">
-           </div> 
+            <div style="margin:10px 0;">
+                <img src="delivery.png" alt="Entrega" style="width:150px; height:auto;">
+            </div> 
             <div class="thankyou-info">
                 <h3>🍔 Obrigado!</h3>
-                <p>Em breve seu pedido estará a caminho.<br>Aguarde só mais um pouquinho. ⚽</p>
+                <p>Em breve seu pedido estará a caminho.</p>
             </div>
             <button class="thankyou-btn" id="closeThankyouBtn">← Voltar ao Site</button>
             <div style="margin-top:14px; font-size:12px; color:#aaa;">❤️ Obrigado por escolher a La Casa Burguer</div>
@@ -2207,20 +2053,15 @@
                 </div>
             </div>
             <div class="copyright">
-                <p> CRIADO POR  ACR DEVELOPER  87 9 9927-6080</p>
+                <p> CRIADO POR ACR DEVELOPER  87 9 9927-6080</p>
             </div>
         </div>
     </footer>
 
     <a href="https://wa.me/5587981193590" class="whatsapp-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
 
-    <!-- Áudio de torcida (link funcional - substituído por arquivo sem erro 403) -->
-    <audio id="goalAudio" preload="auto" style="display:none">
-        <source src="goalAudio.mp3" type="audio/mpeg">
-    </audio>
-
     <script>
-        // ========== CARDÁPIO COMPLETO (MANTIDO IGUAL AO ORIGINAL) ==========
+        // ========== CARDÁPIO COMPLETO ==========
         const menuItems = [
             { id: 1, name: "BAURU", description: "Mussarela, presunto e salada.", price: 8.00, category: "hamburgueres", image: "bauru.png" },
             { id: 2, name: "Hambúrguer", description: "Pão, carne, mussarela e presunto.", price: 9.00, category: "hamburgueres", image: "images.jpeg" },
@@ -2330,13 +2171,12 @@
         const confirmPixBtn = document.getElementById('confirmPixBtn');
         const backToCheckoutBtn = document.getElementById('backToCheckoutBtn');
         
-        // Thank you element
+        // Thank you
         const thankyouOverlay = document.getElementById('thankyouOverlay');
         const closeThankyouBtn = document.getElementById('closeThankyouBtn');
-        
         const locationPhoto = document.getElementById('locationPhoto');
 
-        // Cupom e totais
+        // Cupom
         const couponInput = document.getElementById('couponCode');
         const applyCouponBtn = document.getElementById('applyCouponBtn');
         const couponMessageDiv = document.getElementById('couponMessage');
@@ -2392,69 +2232,8 @@
             updateCheckoutTotals();
         }
 
-        // ===== FUNÇÃO PARA EFEITO "GOL"/"GOLAÇO" E SOM DE TORCIDA (ADICIONADA) =====
-        function playGoalEffect(buttonElement, texto = "GOL") {
-            const rect = buttonElement.getBoundingClientRect();
-            const goalDiv = document.createElement('div');
-            goalDiv.className = 'goal-effect';
-            if (texto === "GOL") {
-                goalDiv.textContent = '⚽ GOL! 🇧🇷';
-            } else {
-                goalDiv.textContent = '⚽ GOLAÇO! 🇧🇷⚽';
-            }
-            goalDiv.style.left = `${rect.left + rect.width / 2 - 70}px`;
-            goalDiv.style.top = `${rect.top - 50}px`;
-            document.body.appendChild(goalDiv);
-            setTimeout(() => {
-                if (goalDiv.parentNode) goalDiv.parentNode.removeChild(goalDiv);
-            }, 1000);
-            
-            const audio = document.getElementById('goalAudio');
-            if (audio) {
-                audio.currentTime = 0;
-                audio.play().catch(e => console.log("Áudio não pôde ser reproduzido:", e));
-            }
-        }
-
-        // Funções de confetes e placar
-        function setupConfetti() {
-            const wrap = document.getElementById('confettiWrap');
-            const colors = ['#009c3b','#ffdf00','#002776','#ffffff','#00aa00'];
-            for (let i = 0; i < 25; i++) {
-                const s = document.createElement('div');
-                s.className = 'star';
-                s.style.cssText = `left:${Math.random()*100}%;top:${-20+Math.random()*-100}px;background:${colors[i%colors.length]};border-radius:${Math.random()>0.5?'50%':'2px'};width:${6+Math.random()*8}px;height:${6+Math.random()*8}px;animation-duration:${5+Math.random()*8}s;animation-delay:${Math.random()*6}s`;
-                wrap.appendChild(s);
-            }
-            for (let i=0;i<10;i++) {
-                const b = document.createElement('div');
-                b.className = 'floating-ball';
-                b.textContent = '⚽';
-                b.style.cssText = `left:${Math.random()*90}%;animation-duration:${8+Math.random()*10}s;animation-delay:${Math.random()*8}s;font-size:${14+Math.random()*12}px`;
-                document.body.appendChild(b);
-            }
-        }
-
-        function setupScoreTicker() {
-            const scores = ["O sabor da torcida. 🇧🇷"];
-            const ticker = document.getElementById('scoreTicker');
-            const all = [...scores, ...scores];
-            ticker.innerHTML = all.map(s => `<span class="score-item">${s}<span class="score-vs">|</span></span>`).join('');
-        }
-
-        function showThankYou() {
-            thankyouOverlay.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function hideThankYou() {
-            thankyouOverlay.classList.remove('active');
-            document.body.style.overflow = 'auto';
-        }
-
-        // ===== FUNÇÃO addToCart MODIFICADA COM EFEITO GOL =====
+        // ===== FUNÇÃO addToCart (sem efeito de gol) =====
         function addToCart(id, buttonElement) {
-            playGoalEffect(buttonElement, "GOL");
             const item = menuItems.find(i => i.id === id);
             const existing = cart.find(i => i.id === id);
             if (existing) existing.quantity++;
@@ -2480,8 +2259,10 @@
             filteredItems.forEach(item => {
                 const div = document.createElement('div');
                 div.className = 'menu-item';
+                // Placeholder SVG inline para fallback
+                const fallbackImg = 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'150\' height=\'150\'%3E%3Crect width=\'150\' height=\'150\' fill=\'%23ddd\'/%3E%3Ctext x=\'75\' y=\'75\' font-family=\'Arial\' font-size=\'14\' text-anchor=\'middle\' fill=\'%23999\'%3ESem Imagem%3C/text%3E%3C/svg%3E';
                 div.innerHTML = `
-                    <div class="item-image"><img src="${item.image}" alt="${item.name}" loading="lazy" onerror="this.src='https://via.placeholder.com/150?text=Imagem'"></div>
+                    <div class="item-image"><img src="${item.image}" alt="${item.name}" loading="lazy" onerror="this.src='${fallbackImg}'"></div>
                     <div class="item-info"><h3>${item.name}</h3><p>${item.description}</p>
                     <div class="item-footer"><span class="price">R$ ${item.price.toFixed(2)}</span>
                     <button class="add-to-cart" data-id="${item.id}">Pedir</button></div></div>
@@ -2506,11 +2287,12 @@
                 return;
             }
             emptyCartMessage.style.display = 'none';
+            const fallbackImg = 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'50\' height=\'50\'%3E%3Crect width=\'50\' height=\'50\' fill=\'%23ddd\'/%3E%3Ctext x=\'25\' y=\'25\' font-family=\'Arial\' font-size=\'8\' text-anchor=\'middle\' fill=\'%23999\'%3EImagem%3C/text%3E%3C/svg%3E';
             cart.forEach(item => {
                 const div = document.createElement('div');
                 div.className = 'cart-item';
                 div.innerHTML = `
-                    <div class="cart-item-image"><img src="${item.image}" onerror="this.src='https://via.placeholder.com/50'"></div>
+                    <div class="cart-item-image"><img src="${item.image}" onerror="this.src='${fallbackImg}'"></div>
                     <div class="cart-item-info"><h4>${item.name}</h4><p>R$ ${item.price.toFixed(2)}</p></div>
                     <div class="cart-item-controls">
                         <button class="quantity-btn decrease" data-id="${item.id}"><i class="fas fa-minus"></i></button>
@@ -2598,8 +2380,6 @@
                 alert('Seu carrinho está vazio!');
                 return;
             }
-            // Efeito GOLAÇO no botão "Finalizar Pedido"
-            playGoalEffect(whatsappCheckout, "GOLAÇO");
             if (cartSidebar.classList.contains('active')) toggleCart();
             customerForm.reset();
             document.getElementById('paymentCash').checked = true;
@@ -2710,7 +2490,31 @@
             showThankYou();
         }
 
-        // Inicialização
+        function showThankYou() {
+            thankyouOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function hideThankYou() {
+            thankyouOverlay.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        function openLocationMap() {
+            window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent("Rua Carlos Cornélio, Centro")}`, '_blank');
+        }
+
+        function toggleMobileMenu() {
+            const isActive = navMenu.classList.contains('active');
+            navMenu.classList.toggle('active');
+            navOverlay.classList.toggle('active');
+            document.body.style.overflow = isActive ? 'auto' : 'hidden';
+            const icon = menuToggle.querySelector('i');
+            icon.classList.toggle('fa-bars');
+            icon.classList.toggle('fa-times');
+        }
+
+        // ========== INICIALIZAÇÃO ==========
         document.addEventListener('DOMContentLoaded', () => {
             cartSidebar.classList.remove('active');
             cartOverlay.classList.remove('active');
@@ -2719,8 +2523,6 @@
             if (window.innerWidth <= 768) cartSidebar.style.bottom = '-100%';
             renderMenuItems();
             updateCartDisplay();
-            setupConfetti();
-            setupScoreTicker();
             
             cartToggle.addEventListener('click', toggleCart);
             closeCart.addEventListener('click', toggleCart);
@@ -2775,20 +2577,6 @@
             checkoutModal.addEventListener('click', (e) => { if (e.target === checkoutModal) closeCheckoutModal(); });
             pixModal.addEventListener('click', (e) => { if (e.target === pixModal) { pixModal.classList.remove('active'); setTimeout(() => checkoutModal.classList.add('active'), 300); } });
         });
-
-        function openLocationMap() {
-            window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent("Rua Carlos Cornélio, Centro")}`, '_blank');
-        }
-
-        function toggleMobileMenu() {
-            const isActive = navMenu.classList.contains('active');
-            navMenu.classList.toggle('active');
-            navOverlay.classList.toggle('active');
-            document.body.style.overflow = isActive ? 'auto' : 'hidden';
-            const icon = menuToggle.querySelector('i');
-            icon.classList.toggle('fa-bars');
-            icon.classList.toggle('fa-times');
-        }
     </script>
 </body>
 </html>
